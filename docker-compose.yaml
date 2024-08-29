@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./API
+    ports:
+      - "3001:3001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3  
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/CopaLibertadores
+    depends_on:
+      - mongo
+    networks:
+      - backend-net
+
+  
+
+  frontend:
+    build: 
+      context: ./front-end
+      args:
+        - NEXT_PUBLIC_API_URL=http://backend:3001
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+      - backend
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:3001
+    entrypoint: ["/usr/local/bin/wait-for-it.sh", "backend:3001", "--strict", "--timeout=300", "--", "npm", "run", "dev"]
+    networks:
+      - backend-net    
+  mongo:
+    build: .
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - backend-net
+      
+  mongo-init:
+    image: busybox
+    volumes:
+      - mongo-data:/data/db
+    entrypoint: ["sh", "-c", "chown -R 1000:1000 /data/db"]
+      
+networks:
+  backend-net:
+    driver: bridge
+
+volumes:
+  mongo-data:

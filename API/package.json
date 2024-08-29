@@ -1,0 +1,23 @@
+{
+  "name": "index",
+  "version": "1.0.0",
+  "description": "API para taller de WEB sobre Copa Libertadores",
+  "main": "API.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "index",
+    "Copa",
+    "Libertadores"
+  ],
+  "author": "Matias Fino, Tomas Elordi, Tobias Romano",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "express": "^4.18.2",
+    "mongodb": "^5.7.0",
+    "mongoose": "^7.3.0",
+    "request": "^2.88.2"
+  }
+}
